@@ -1,9 +1,9 @@
 import argparse
 from os import path
 import sys
-from framework_favicon.database import data
-from utils import *
-from grabbers import *
+from .database import show_database, database
+from .utils import *
+from .grabbers import *
 
 from framework_favicon.utils import update_hashes_database
 def main_cli():

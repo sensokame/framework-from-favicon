@@ -1,4 +1,5 @@
-from database import database, GrabResult, Status
+from .database import database
+from .grab_result import GrabResult, Status
 
 def grab_favicon_from_md5(md5: str) -> GrabResult:
     if md5 in database.framworks:

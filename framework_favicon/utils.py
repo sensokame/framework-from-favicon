@@ -1,8 +1,11 @@
-from framework_favicon.database import *
+from email import header
 import os 
 from typing import Callable
 import logging
 from rich.logging import RichHandler
+from .grab_result import *
+from .framework_hash import FrameworkHash
+from .values import *
 logging.basicConfig(
     level="NOTSET",
     format="%(message)s",
@@ -10,7 +13,7 @@ logging.basicConfig(
     handlers=[RichHandler(rich_tracebacks=True)]
 )
 default_logger = logging.getLogger("framework_favicon_logger")
-default_logger.setLevel()
+default_logger.setLevel(logging.INFO)
 dir_path = os.path.dirname(os.path.realpath(__file__))
 database_location = os.path.join(dir_path, "database.json")
 
@@ -22,7 +25,11 @@ framework = str
 def deserialize_hashes(logger: logging.Logger = default_logger) -> dict[hash, framework]:
     import json
     res = {}
-    for framework in json.load(open(database_location, 'r').read()).items():
+    if not os.path.exists(database_location):
+        logger.error(f'database file not found, try to update the database.')
+        return res
+    database_content = open(database_location, 'r').read()
+    for framework in json.load(database_content).items():
         res[framework["hash"]] = framework["framework"]
     found = len(res) 
     if found:
@@ -30,17 +37,6 @@ def deserialize_hashes(logger: logging.Logger = default_logger) -> dict[hash, fr
     else:
         logger.warn(f'no hash is found in the database, results may be invalid.')
     return res
-
-def get_error(resource: str) -> str:
-    return f'could not determine framework for {resource} based on favicon provided' \
-        "please try other ways to determine the framework, "\
-        "if you do manage to determine the favicon, update the OWASP database if possible\n" \
-            'database can be found in {hashes_url}'
-
-def get_info(resource: str, name: str) -> str:
-    return f'framework {name} found for resource {resource}'
-
-
 
 def handle_response(resource: str, action: Callable[[str], GrabResult],logger: logging.Logger= default_logger ) -> None:
     response = action(resource)
@@ -56,7 +52,8 @@ def serialize_hashes(frameworks: list[FrameworkHash]) -> None:
 def get_hashes(logger: logging.Logger = default_logger) -> str:
     import urllib.request
     logger.info(f'attempting to get hash database from {hashes_url}')
-    content = urllib.request.urlopen(hashes_url).read()
+    req = urllib.request.Request(hashes_url, headers=hdr)
+    content = urllib.request.urlopen(req).read()
     if content: 
         logger.info(f'managed to retrieve answer from website, parsing data')
     else:
@@ -64,13 +61,13 @@ def get_hashes(logger: logging.Logger = default_logger) -> str:
         return ''
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(content, 'html.parser')
-    return str(soup.pre)
+    return str(soup.pre.text)
 
 def update_hashes_database(logger: logging.Logger = default_logger) -> None:
     logger.info("updating database")
     lis = []
     for line in get_hashes().splitlines():
-        hash, framework = line.split(':')
+        hash, framework = line.split(':', 1)
         lis.append(FrameworkHash(framework, hash))
     found = len(lis)
     if (found):
@@ -80,10 +77,3 @@ def update_hashes_database(logger: logging.Logger = default_logger) -> None:
     else:
         logger.warn(f'could not find any database, falling back on previous database version')
 
-def show_database(logger: logging.Logger = default_logger) -> None:
-    logger.info(f'database contains {len(database.framworks)} entries: ')
-    res = ""
-    for h, f in database.framworks:
-        res += f"\t{f}:{h}\n"
-    logger.info(res)
-    logger.info("happy hacking")

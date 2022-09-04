@@ -28,11 +28,11 @@ def deserialize_hashes(logger: logging.Logger = default_logger) -> dict[hash, fr
     if not os.path.exists(database_location):
         logger.error(f'database file not found, try to update the database.')
         return res
-    database_content = open(database_location, 'r').read()
-    for framework in json.load(database_content).items():
+    database_content = json.load(open(database_location, 'r'))
+    for framework in database_content:
         res[framework["hash"]] = framework["framework"]
     found = len(res) 
-    if found:
+    if found > 0:
         logger.info(f'database has {found} hashes.')
     else:
         logger.warn(f'no hash is found in the database, results may be invalid.')
@@ -53,7 +53,9 @@ def get_hashes(logger: logging.Logger = default_logger) -> str:
     import urllib.request
     logger.info(f'attempting to get hash database from {hashes_url}')
     req = urllib.request.Request(hashes_url, headers=hdr)
-    content = urllib.request.urlopen(req).read()
+    response = urllib.request.urlopen(req)
+    if response.status == 200:
+        content = response.read()
     if content: 
         logger.info(f'managed to retrieve answer from website, parsing data')
     else:

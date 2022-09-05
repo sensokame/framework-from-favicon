@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: install nox
-        uses: excitedleigh/setup-nox@v2.0.0
+        uses: daisylb/setup-nox@v2.1.0
       - name: Run tests
         run: |
           nox -e test

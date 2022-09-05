@@ -40,6 +40,7 @@ def test(session: nox.Session):
         *session.posargs
     )
 
+
 @nox.session()
 def package(session: nox.Session):
     session.install(
@@ -49,6 +50,7 @@ def package(session: nox.Session):
     )
     session.run(*split_cmd(Tasks.build_wheel))
 
+
 @nox.session()
 def cov_report(session: nox.Session):
     """Combine coverage.py files and generate an XML report"""
@@ -56,6 +58,7 @@ def cov_report(session: nox.Session):
         'coverage'
     )
     session.run(*split_cmd(Tasks.coverage('xml')), '-i')
+
 
 @nox.session()
 def quality(session: nox.Session):

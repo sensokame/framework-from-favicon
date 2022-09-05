@@ -6,6 +6,8 @@ from rich.logging import RichHandler
 from .grab_result import *
 from .framework_hash import FrameworkHash
 from .values import *
+
+
 logging.basicConfig(
     level="NOTSET",
     format="%(message)s",
@@ -16,6 +18,7 @@ default_logger = logging.getLogger("framework_favicon_logger")
 default_logger.setLevel(logging.INFO)
 dir_path = os.path.dirname(os.path.realpath(__file__))
 database_location = os.path.join(dir_path, "database.json")
+
 
 def obj_dict(obj):
     return obj.__dict__
@@ -38,12 +41,14 @@ def deserialize_hashes(logger: logging.Logger = default_logger) -> dict[hash, fr
         logger.warn(f'no hash is found in the database, results may be invalid.')
     return res
 
+
 def handle_response(resource: str, action: Callable[[str], GrabResult],logger: logging.Logger= default_logger ) -> None:
     response = action(resource)
     if response.status == Status.STATUS_OK:
         logger.info(get_info(resource, response.data))
     if response.status == Status.STATUS_NOT_FOUND:
         logger.error(get_error(resource))
+
 
 def serialize_hashes(frameworks: list[FrameworkHash]) -> None:
     import json
@@ -65,6 +70,7 @@ def get_hashes(logger: logging.Logger = default_logger) -> str:
     soup = BeautifulSoup(content, 'html.parser')
     return str(soup.pre.text)
 
+
 def update_hashes_database(logger: logging.Logger = default_logger) -> None:
     logger.info("updating database")
     lis = []
@@ -78,4 +84,3 @@ def update_hashes_database(logger: logging.Logger = default_logger) -> None:
         logger.info("database updated")
     else:
         logger.warn(f'could not find any database, falling back on previous database version')
-

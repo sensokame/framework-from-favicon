@@ -4,8 +4,9 @@ import sys
 from .database import show_database, database
 from .utils import *
 from .grabbers import *
-
 from framework_favicon.utils import update_hashes_database
+
+
 def main_cli():
     """
     Main function. Expected to be run from CLI and used
@@ -43,4 +44,3 @@ def main_cli():
     if parser.md5:
         for md5 in parser.md5:
             handle_response(md5, grab_favicon_from_md5)
-

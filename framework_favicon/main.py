@@ -17,45 +17,45 @@ def main_cli():
     """
     parser = argparse.ArgumentParser(description="Framework Guesser from favicon")
     parser.add_argument(
-        '-h', 
-        '--help', 
-        action='store_true', 
+        '-h',
+        '--help',
+        action='store_true',
         help='Display help page'
-        )
+    )
     parser.add_argument(
-        '-u', 
-        '--url', 
-        action='append', 
+        '-u',
+        '--url',
+        action='append',
         help='website url from which to get favicon'
-        )
+    )
     parser.add_argument(
-        '-f', 
-        '--file', 
-        action='append', 
+        '-f',
+        '--file',
+        action='append',
         help='faveicon file, could be local or url'
-        )
+    )
     parser.add_argument(
-        '-d', 
-        '--data', 
-        action='append', 
+        '-d',
+        '--data',
+        action='append',
         help='faveicon file data, not recommended to use, but what the hell'
-        )
+    )
     parser.add_argument(
-        '-m', 
-        '--md5', 
-        action='append', 
+        '-m',
+        '--md5',
+        action='append',
         help='faveicon md5 hash'
-        )
+    )
     parser.add_argument(
-        '--update', 
-        action='store_true', 
+        '--update',
+        action='store_true',
         help='update the hashes database'
-        )
+    )
     parser.add_argument(
-        "show_database", 
-        action='store_true', 
+        "show_database",
+        action='store_true',
         help='show the current database'
-        )
+    )
 
     args = parser.parse_known_args()
     if len(sys.argv) == 1 or args.help:

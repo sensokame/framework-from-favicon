@@ -1,4 +1,4 @@
-import os 
+import os
 from typing import Callable
 import logging
 from rich.logging import RichHandler
@@ -31,20 +31,23 @@ def deserialize_hashes(logger: logging.Logger = default_logger) -> dict[hash, fr
     import json
     res = {}
     if not os.path.exists(database_location):
-        logger.error(f'database file not found, try to update the database.')
+        logger.error(f'{database_location} not found, try to update the database.')
         return res
     database_content = json.load(open(database_location, 'r'))
     for framework in database_content:
         res[framework["hash"]] = framework["framework"]
-    found = len(res) 
+    found = len(res)
     if found > 0:
         logger.info(f'database has {found} hashes.')
     else:
-        logger.warn(f'no hash is found in the database, results may be invalid.')
+        logger.warn('no hash is found in the database, results may be invalid.')
     return res
 
 
-def handle_response(resource: str, action: Callable[[str], GrabResult], logger: logging.Logger= default_logger ) -> None:
+def handle_response(
+    resource: str,
+    action: Callable[[str], GrabResult],
+    logger: logging.Logger = default_logger) -> None:
     response = action(resource)
     if response.status == Status.STATUS_OK:
         logger.info(get_info(resource, response.data))
@@ -56,6 +59,7 @@ def serialize_hashes(frameworks: list[FrameworkHash]) -> None:
     import json
     open(database_location, "w").write(json.dumps(frameworks, default=obj_dict))
 
+
 def get_hashes(logger: logging.Logger = default_logger) -> str:
     import urllib.request
     logger.info(f'attempting to get hash database from {hashes_url}')
@@ -64,9 +68,11 @@ def get_hashes(logger: logging.Logger = default_logger) -> str:
     if response.status == 200:
         content = response.read()
     if content: 
-        logger.info(f'managed to retrieve answer from website, parsing data')
+        logger.info('managed to retrieve answer from website, parsing data')
     else:
-        logger.warn(f'unable to update, falling back on existing database version, results may be invalid')
+        logger.warn(
+            'unable to update, falling back on existing database version, results may be invalid'
+        )
         return ''
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(content, 'html.parser')
@@ -85,4 +91,4 @@ def update_hashes_database(logger: logging.Logger = default_logger) -> None:
         serialize_hashes(lis)
         logger.info("database updated")
     else:
-        logger.warn(f'could not find any database, falling back on previous database version')
+        logger.warn('could not find any database, falling back on previous database version')

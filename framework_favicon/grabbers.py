@@ -47,6 +47,7 @@ def grab_favicon_from_website(url: str) -> GrabResult:
     page = urllib.request.urlopen(req)
     soup = BeautifulSoup(page)
     icon_link = soup.find("link", rel=re.compile("shortcut icon", re.I))['href']
+
     def is_absolute(url):
         return bool(urlparse(url).netloc)
     if not is_absolute(icon_link):
@@ -57,5 +58,5 @@ def grab_favicon_from_website(url: str) -> GrabResult:
 def try_grab_favicon_from_website(url: str) -> GrabResult:
     try:
         return grab_favicon_from_website(url)
-    except:
+    except Exception:
         return GrabResult(Status.STATUS_NOT_FOUND, '')

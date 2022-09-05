@@ -1,8 +1,8 @@
 import unittest
 from framework_favicon.grab_result import Status
 from framework_favicon.grabbers import grab_favicon_from_file, grab_favicon_from_md5, grab_favicon_from_website
-from test_base import TestBase
-from values import *
+from .test_base import TestBase
+from .values import *
 
 class TestGrabbers(TestBase):
     def test_local_file_grabber(self):

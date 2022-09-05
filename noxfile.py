@@ -2,7 +2,6 @@ import nox
 import sys
 import os
 
-from pathlib import Path
 
 sys.path.append(os.path.dirname(__file__))
 

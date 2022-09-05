@@ -2,8 +2,11 @@ import argparse
 from os import path
 import sys
 from .database import show_database, database
-from .utils import *
-from .grabbers import *
+from .utils import database_location, handle_response
+from .grabbers import grab_favicon_from_data
+from .grabbers import grab_favicon_from_file
+from .grabbers import grab_favicon_from_website
+from .grabbers import grab_favicon_from_md5
 from framework_favicon.utils import update_hashes_database
 
 
@@ -13,16 +16,49 @@ def main_cli():
     only in automated context.
     """
     parser = argparse.ArgumentParser(description="Framework Guesser from favicon")
-    parser.add_argument('-h', '--help', action='store_true', help='Display help page')
-    parser.add_argument('-u', '--url', action='append', help='website url from which to get favicon')
-    parser.add_argument('-f', '--file', action='append', help='faveicon file, could be local or url')
-    parser.add_argument('-d', '--data', action='append', help='faveicon file data, not recommended to use, but what the hell')
-    parser.add_argument('-m', '--md5', action='append', help='faveicon md5 hash')
-    parser.add_argument('--update', action='store_true', help='update the hashes database')
-    parser.add_argument("show_database", action='store_true', help='show the current database')
+    parser.add_argument(
+        '-h', 
+        '--help', 
+        action='store_true', 
+        help='Display help page'
+        )
+    parser.add_argument(
+        '-u', 
+        '--url', 
+        action='append', 
+        help='website url from which to get favicon'
+        )
+    parser.add_argument(
+        '-f', 
+        '--file', 
+        action='append', 
+        help='faveicon file, could be local or url'
+        )
+    parser.add_argument(
+        '-d', 
+        '--data', 
+        action='append', 
+        help='faveicon file data, not recommended to use, but what the hell'
+        )
+    parser.add_argument(
+        '-m', 
+        '--md5', 
+        action='append', 
+        help='faveicon md5 hash'
+        )
+    parser.add_argument(
+        '--update', 
+        action='store_true', 
+        help='update the hashes database'
+        )
+    parser.add_argument(
+        "show_database", 
+        action='store_true', 
+        help='show the current database'
+        )
 
     args = parser.parse_known_args()
-    if len(sys.argv)==1 or args.help:
+    if len(sys.argv) == 1 or args.help:
         parser.print_help()
         return 0
     if parser.update or not path.exists(database_location):
@@ -31,7 +67,7 @@ def main_cli():
     database.update_frameworks()
     if parser.show_database:
         show_database()
-    
+
     if parser.url:
         for url in parser.url:
             handle_response(url, grab_favicon_from_website)

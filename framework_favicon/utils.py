@@ -1,11 +1,10 @@
-from email import header
 import os 
 from typing import Callable
 import logging
 from rich.logging import RichHandler
-from .grab_result import *
+from .grab_result import GrabResult, Status
 from .framework_hash import FrameworkHash
-from .values import *
+from .values import get_error, get_info, hashes_url, hdr
 
 
 logging.basicConfig(
@@ -23,8 +22,11 @@ database_location = os.path.join(dir_path, "database.json")
 def obj_dict(obj):
     return obj.__dict__
 
+
 hash = str
 framework = str
+
+
 def deserialize_hashes(logger: logging.Logger = default_logger) -> dict[hash, framework]:
     import json
     res = {}
@@ -42,7 +44,7 @@ def deserialize_hashes(logger: logging.Logger = default_logger) -> dict[hash, fr
     return res
 
 
-def handle_response(resource: str, action: Callable[[str], GrabResult],logger: logging.Logger= default_logger ) -> None:
+def handle_response(resource: str, action: Callable[[str], GrabResult], logger: logging.Logger= default_logger ) -> None:
     response = action(resource)
     if response.status == Status.STATUS_OK:
         logger.info(get_info(resource, response.data))

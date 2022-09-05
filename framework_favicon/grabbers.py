@@ -20,7 +20,7 @@ def grab_favicon_from_file(file: str) -> GrabResult:
     # local file
     if (path.exists(file)):
         return grab_favicon_from_data(open(file, 'rb').read())
-    else :
+    else:
         import validators
         # internet url
         if validators.url(file):
@@ -34,7 +34,7 @@ def grab_favicon_from_file(file: str) -> GrabResult:
 def try_grab_favicon_from_file(file: str) -> GrabResult:
     try:
         return grab_favicon_from_file(file)
-    except:
+    except Exception:
         return GrabResult(Status.STATUS_NOT_FOUND, '')
 
 

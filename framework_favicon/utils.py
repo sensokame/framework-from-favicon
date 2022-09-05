@@ -47,7 +47,8 @@ def deserialize_hashes(logger: logging.Logger = default_logger) -> dict[hash, fr
 def handle_response(
     resource: str,
     action: Callable[[str], GrabResult],
-    logger: logging.Logger = default_logger) -> None:
+    logger: logging.Logger = default_logger
+) -> None:
     response = action(resource)
     if response.status == Status.STATUS_OK:
         logger.info(get_info(resource, response.data))
@@ -67,7 +68,7 @@ def get_hashes(logger: logging.Logger = default_logger) -> str:
     response = urllib.request.urlopen(req)
     if response.status == 200:
         content = response.read()
-    if content: 
+    if content:
         logger.info('managed to retrieve answer from website, parsing data')
     else:
         logger.warn(

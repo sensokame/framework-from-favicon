@@ -18,7 +18,7 @@ def get_error(resource: str) -> str:
     return f'could not determine framework for {resource} based on favicon provided' \
         "please try other ways to determine the framework, "\
         "if you do manage to determine the favicon, update the OWASP database if possible\n" \
-            'database can be found in {hashes_url}'
+        'database can be found in {hashes_url}'
 
 
 def get_info(resource: str, name: str) -> str:

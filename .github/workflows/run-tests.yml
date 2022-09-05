@@ -1,11 +1,11 @@
 name: Run Tests
 on: [push]
-strategy:
-  matrix:
-    os: [ubuntu-latest, windows-latest]
-    python-version: ["3.8", "3.9", "3.10"]
 jobs: 
   Run-Tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.8", "3.9", "3.10"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository code

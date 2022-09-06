@@ -1,5 +1,4 @@
 import unittest
-from .test_base import TestBase
 from framework_favicon.main import parser
 import sys
 try:
@@ -7,6 +6,7 @@ try:
     from unittest.mock import patch
 except ImportError:
     from mock import patch
+
 
 class TestCli(unittest.TestCase):
     def test_cli_update(self):
@@ -19,8 +19,7 @@ class TestCli(unittest.TestCase):
             self.assertIsNone(args.data)
             self.assertIsNone(args.file)
             self.assertIsNone(args.url)
-            pass
-    
+
     def test_cli_show_database(self):
         testargs = ["framework_favicon", "--show_database"]
         with patch.object(sys, 'argv', testargs):
@@ -31,7 +30,6 @@ class TestCli(unittest.TestCase):
             self.assertIsNone(args.data)
             self.assertIsNone(args.file)
             self.assertIsNone(args.url)
-            pass
 
     def test_cli_urls(self):
         command = "--url"
@@ -45,7 +43,6 @@ class TestCli(unittest.TestCase):
             self.assertIsNone(args.data)
             self.assertIsNone(args.file)
             self.assertEqual(args.url, urls)
-            pass
 
     def test_cli_md5(self):
         command = "--md5"
@@ -59,7 +56,6 @@ class TestCli(unittest.TestCase):
             self.assertIsNone(args.data)
             self.assertIsNone(args.file)
             self.assertEqual(args.md5, md5)
-            pass
 
     def test_cli_data(self):
         command = "--data"
@@ -73,7 +69,6 @@ class TestCli(unittest.TestCase):
             self.assertIsNone(args.url)
             self.assertIsNone(args.file)
             self.assertEqual(args.data, datas)
-            pass
 
     def test_cli_file(self):
         command = "--file"
@@ -87,7 +82,7 @@ class TestCli(unittest.TestCase):
             self.assertIsNone(args.data)
             self.assertIsNone(args.url)
             self.assertEqual(args.file, files)
-            pass
+
 
 if __name__ == "__main__":
     unittest.main()

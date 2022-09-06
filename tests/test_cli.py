@@ -1,5 +1,5 @@
 import unittest
-from test_base import TestBase
+from .test_base import TestBase
 from framework_favicon.main import parser
 import sys
 try:

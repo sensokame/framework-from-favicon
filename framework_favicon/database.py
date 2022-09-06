@@ -12,7 +12,7 @@ class database:
 def show_database(logger: logging.Logger = default_logger) -> None:
     logger.info(f'database contains {len(database.framworks)} entries: ')
     res = ""
-    for h, f in database.framworks:
-        res += f"\t{f}:{h}\n"
+    for h, f in database.framworks.items():
+        res += f"{f}:{h}\n"
     logger.info(res)
     logger.info("happy hacking")

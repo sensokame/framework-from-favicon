@@ -46,6 +46,7 @@ parser.add_argument(
     help='show the current database'
 )
 
+
 def main_cli():
     """
     Main function. Expected to be run from CLI.
@@ -76,6 +77,7 @@ def main_cli():
     if args.md5:
         for md5 in args.md5:
             handle_response(md5, grab_favicon_from_md5)
+
 
 if __name__ == "__main__":
     main_cli()

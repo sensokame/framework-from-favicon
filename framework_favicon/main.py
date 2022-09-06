@@ -12,16 +12,9 @@ from framework_favicon.utils import update_hashes_database
 
 def main_cli():
     """
-    Main function. Expected to be run from CLI and used
-    only in automated context.
+    Main function. Expected to be run from CLI.
     """
     parser = argparse.ArgumentParser(description="Framework Guesser from favicon")
-    parser.add_argument(
-        '-h',
-        '--help',
-        action='store_true',
-        help='Display help page'
-    )
     parser.add_argument(
         '-u',
         '--url',
